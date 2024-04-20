@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -22,7 +23,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "team")
-public class Team {
+public class Team implements Serializable {
     @Id
     private long id;
     private String name;

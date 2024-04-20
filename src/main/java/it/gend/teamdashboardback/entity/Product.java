@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -24,7 +25,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
     @Id
     private long id;
     private String name;

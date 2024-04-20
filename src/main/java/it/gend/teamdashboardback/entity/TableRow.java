@@ -14,6 +14,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 /**
@@ -24,7 +26,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "table_row")
-public class TableRow {
+public class TableRow implements Serializable {
     @Id
     long id;
     LocalDate date;
