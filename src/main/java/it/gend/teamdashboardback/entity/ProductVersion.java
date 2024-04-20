@@ -28,7 +28,7 @@ public class ProductVersion implements Serializable {
     @Id
     long id;
     @ManyToOne
-    @JsonBackReference
+    @JsonManagedReference
     Product product;
     String version;
     String description;
@@ -38,5 +38,4 @@ public class ProductVersion implements Serializable {
     Team team;
     @ManyToOne
     TableRow tableRow;
-
 }

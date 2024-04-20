@@ -30,9 +30,6 @@ public class Product implements Serializable {
     private long id;
     private String name;
     private String description;
-    @OneToMany()
-    @JsonBackReference
-    private Set<ProductVersion> productVersions;
     @ManyToOne()
     @JsonBackReference
     private Team team;

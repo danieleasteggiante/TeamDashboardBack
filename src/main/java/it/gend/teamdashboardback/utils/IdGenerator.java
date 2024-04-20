@@ -19,6 +19,6 @@ public class IdGenerator {
     public <T> Long getId(Class<T> entityClass) {
         Query query = entityManager.createQuery("SELECT MAX(e.id) FROM " + entityClass.getSimpleName() + " e");
         Long maxId = (Long) query.getSingleResult();
-        return maxId != null ? maxId : 0L;
+        return maxId == null || maxId == 0 ? 1L : maxId + 1L;
     }
 }
