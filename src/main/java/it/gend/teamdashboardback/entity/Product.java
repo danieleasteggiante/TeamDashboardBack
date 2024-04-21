@@ -33,5 +33,4 @@ public class Product implements Serializable {
     @ManyToOne()
     @JsonBackReference
     private Team team;
-
 }

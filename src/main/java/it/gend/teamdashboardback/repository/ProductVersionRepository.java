@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface ProductVersionRepository extends JpaRepository<ProductVersion, Long> {
     List<ProductVersion> findAllByTeamName(String teamName);
+    List<ProductVersion> findAllByProductNameIn(List<String> productNames);
 }

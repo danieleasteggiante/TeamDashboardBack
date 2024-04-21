@@ -2,11 +2,13 @@ package it.gend.teamdashboardback.service;
 
 import it.gend.teamdashboardback.entity.ProductVersion;
 import it.gend.teamdashboardback.repository.ProductVersionRepository;
+import it.gend.teamdashboardback.service.DTO.RowsFromProductNamesDTO;
 import it.gend.teamdashboardback.utils.IdGenerator;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -36,6 +38,7 @@ public class ProductVersionService {
     public List<ProductVersion> findProductVersionByTeamName(String teamName) {
         return productVersionRepository.findAllByTeamName(teamName);
     }
+
 
     public boolean deleteProductVersion(long id) {
         ProductVersion productVersion = productVersionRepository.findById(id).orElseThrow();

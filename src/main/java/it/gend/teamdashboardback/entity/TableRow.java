@@ -17,6 +17,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 /**
  * @author Daniele Asteggiante
@@ -25,6 +26,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+
 @Table(name = "table_row")
 public class TableRow implements Serializable {
     @Id
@@ -37,4 +39,16 @@ public class TableRow implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "product_version_id"))
     Set<ProductVersion> productVersions;
     ReleaseLocation releaseLocation;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TableRow tableRow)) return false;
+        return getId() == tableRow.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

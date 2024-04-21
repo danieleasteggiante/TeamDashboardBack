@@ -1,6 +1,8 @@
 package it.gend.teamdashboardback.rest;
 
 import it.gend.teamdashboardback.entity.ProductVersion;
+import it.gend.teamdashboardback.entity.TableRow;
+import it.gend.teamdashboardback.service.DTO.RowsFromProductNamesDTO;
 import it.gend.teamdashboardback.service.ProductVersionService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
