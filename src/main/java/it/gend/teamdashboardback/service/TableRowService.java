@@ -24,58 +24,45 @@ import java.util.stream.Collectors;
 @Transactional
 public class TableRowService {
     private final TableRowRepository tableRowRepository;
-    private final ProductVersionService productVersionService;
 
-    public TableRowService(TableRowRepository tableRowRepository, ProductVersionService productVersionService) {
+    public TableRowService(TableRowRepository tableRowRepository) {
         this.tableRowRepository = tableRowRepository;
-        this.productVersionService = productVersionService;
     }
     public List<TableRow> getAllProducts() {
         return tableRowRepository.findAll();
     }
 
-    public RowsFromProductNamesDTO findAllFromProductNameIn(List<String> products) {
+    public List<RowsFromProductNamesDTO> findAllFromProductNameIn(List<String> products) {
         List<TableRow> tableRows = tableRowRepository.findAll();
-        RowsFromProductNamesDTO rowsFromProductNamesDTOS = new RowsFromProductNamesDTO();
+        List<RowsFromProductNamesDTO> rowsFromProductNamesDTOS = new ArrayList<>();
         for (TableRow row : tableRows) {
-            if(!checkIfKeyAlreadyExists(rowsFromProductNamesDTOS, row))
-                addProductToMap(rowsFromProductNamesDTOS, row, products);
+            RowsFromProductNamesDTO rowsFromProductNamesDTO = new RowsFromProductNamesDTO();
+            rowsFromProductNamesDTO.setTableRow(row);
+            rowsFromProductNamesDTO.setRowsFromProductNames(createProductVersionDTOs(products, row));
         }
         return rowsFromProductNamesDTOS;
     }
 
-    private void addProductToMap(RowsFromProductNamesDTO rowsFromProductNamesDTOS, TableRow row, List<String> products) {
-        Set<RowsFromProductNamesDTO.ProductVersionDTO> productVersions = new LinkedHashSet<>();
+    private Set<RowsFromProductNamesDTO.ProductVersionDTO> createProductVersionDTOs(List<String> products, TableRow row) {
+        Set<RowsFromProductNamesDTO.ProductVersionDTO> productVersionDTOS = new LinkedHashSet<>();
         for (String product : products) {
-            boolean isPresent = false;
-            for (ProductVersion pV : row.getProductVersions()) {
-                isPresent = pV.getProduct().getName().equals(product);
-                addIfPresent(productVersions, pV, product);
-            }
-            if (!isPresent) addPlaceholder(productVersions, product);
+            if (!addIfPresentInRow(product, row, productVersionDTOS))
+                productVersionDTOS.add(new RowsFromProductNamesDTO.ProductVersionDTO(product, "placeholder", "placeholder"));
         }
-        rowsFromProductNamesDTOS.getRowsFromProductNames().put(row, productVersions);
+        return productVersionDTOS;
     }
 
-    private void addPlaceholder(Set<RowsFromProductNamesDTO.ProductVersionDTO> productVersions, String productName) {
-        ProductVersion pV = new ProductVersion();
-        Product product = new Product();
-        product.setName(productName + " - Placeholder");
-        pV.setProduct(product);
-        productVersions.add(mapToProductVersionDTO(pV));
-    }
-
-    private RowsFromProductNamesDTO.ProductVersionDTO mapToProductVersionDTO(ProductVersion pV) {
-        return new RowsFromProductNamesDTO.ProductVersionDTO(pV.getProduct().getName(), pV.getVersion(), pV.getDescription());
-    }
-
-    private void addIfPresent(Set<RowsFromProductNamesDTO.ProductVersionDTO> productVersions, ProductVersion pV, String product) {
-        if (pV.getProduct().getName().equals(product))
-            productVersions.add(mapToProductVersionDTO(pV));
-    }
-
-    private boolean checkIfKeyAlreadyExists(RowsFromProductNamesDTO rowsFromProductNamesDTOS, TableRow row) {
-        return rowsFromProductNamesDTOS.getRowsFromProductNames().containsKey(row);
+    private boolean addIfPresentInRow(String product, TableRow row, Set<RowsFromProductNamesDTO.ProductVersionDTO> productVersionDTOS) {
+        Set<ProductVersion> productVersions = row.getProductVersions();
+        for (ProductVersion productVersion : productVersions) {
+            if (productVersion.getProduct().getName().equals(product)) {
+                RowsFromProductNamesDTO.ProductVersionDTO productVersionDTO =
+                           new RowsFromProductNamesDTO.ProductVersionDTO(productVersion.getProduct().getName(),productVersion.getVersion(), productVersion.getDescription());
+                productVersionDTOS.add(productVersionDTO);
+                return true;
+            }
+        }
+        return false;
     }
 
 }

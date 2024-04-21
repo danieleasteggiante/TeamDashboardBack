@@ -18,8 +18,8 @@ import java.util.Set;
 @Getter
 @Setter
 public class RowsFromProductNamesDTO {
-
-    private Map<TableRow, Set<ProductVersionDTO>> rowsFromProductNames;
+    TableRow tableRow;
+    Set<ProductVersionDTO> rowsFromProductNames;
 
     @AllArgsConstructor
     @NoArgsConstructor
